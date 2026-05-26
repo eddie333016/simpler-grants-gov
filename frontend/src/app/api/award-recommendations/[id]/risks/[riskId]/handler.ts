@@ -1,5 +1,4 @@
-import { readError, UnauthorizedError } from "src/errors";
-import { getSession } from "src/services/auth/session";
+import { readError } from "src/errors";
 import { deleteAwardRecommendationRisk } from "src/services/fetch/fetchers/awardRecommendationFetcherClient";
 
 import { NextRequest } from "next/server";
@@ -11,13 +10,6 @@ export async function deleteRiskForAwardRecommendation(
   const { id, riskId } = await params;
 
   try {
-    const session = await getSession();
-    if (!session || !session.token) {
-      throw new UnauthorizedError(
-        "No active session to delete award recommendation risk",
-      );
-    }
-
     if (!id) {
       throw new Error("Award recommendation ID is required");
     }

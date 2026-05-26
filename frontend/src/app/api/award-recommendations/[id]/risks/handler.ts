@@ -1,5 +1,4 @@
-import { readError, UnauthorizedError } from "src/errors";
-import { getSession } from "src/services/auth/session";
+import { readError } from "src/errors";
 import { getAwardRecommendationRisks } from "src/services/fetch/fetchers/awardRecommendationFetcherClient";
 import { PaginationRequestBody } from "src/types/search/searchRequestTypes";
 
@@ -15,13 +14,6 @@ export async function getRisksForAwardRecommendation(
   };
 
   try {
-    const session = await getSession();
-    if (!session || !session.token) {
-      throw new UnauthorizedError(
-        "No active session to fetch award recommendation risks",
-      );
-    }
-
     if (!id) {
       throw new Error("Award recommendation ID is required");
     }
