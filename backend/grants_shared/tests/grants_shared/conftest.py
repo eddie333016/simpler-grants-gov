@@ -1,3 +1,5 @@
+import os
+
 import _pytest.monkeypatch
 import boto3
 import pytest
@@ -78,9 +80,11 @@ def monkeypatch_module():
 @pytest.fixture
 def ses_client(monkeypatch):
     """
-    Create a mocked SES client using moto. The mock is automatically cleaned up after the test.
+    Create a mocked SESv2 client using moto. The mock is automatically cleaned up after the test.
     """
     monkeypatch.setenv("IS_LOCAL_AWS", "0")
 
     with mock_aws():
-        yield boto3.client("ses", region_name="us-east-1")
+        ses_client = boto3.client("sesv2", region_name="us-east-1")
+        ses_client.create_email_identity(EmailIdentity=os.getenv("AWS_SES_FROM_EMAIL"))
+        yield ses_client
